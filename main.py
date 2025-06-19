@@ -19,9 +19,13 @@ def main():
 
     asteroids = pygame.sprite.Group()
     Asteroid.containers = (asteroids, drawable, updateable)
-
     AsteroidField.containers = (updateable)
     AsteroidField()
+
+    shots = pygame.sprite.Group()
+    Shot.containers = (shots, drawable, updateable)
+
+
     dt = 0
 
     while True:
@@ -30,9 +34,14 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
-
+        for asteroid in asteroids:
+            for shot in shots:
+                if shot.is_colliding(asteroid):
+                    asteroid.split()
+                    shot.kill()
         screen.fill("black",rect=None)
         updateable.update(dt)
+
         for obj in drawable:
             obj.draw(screen)
         for asteroid in asteroids:
